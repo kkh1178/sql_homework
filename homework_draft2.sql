@@ -138,13 +138,54 @@ group by film.title;
 
 -- 
 -- 6e. Using the tables payment and customer and the JOIN command, list the total paid by each customer. List the customers alphabetically by last name:
--- 
--- 	![Total amount paid](Images/total_payment.png)
--- 7a. The music of Queen and Kris Kristofferson have seen an unlikely resurgence. As an unintended consequence, films starting with the letters K and Q have also soared in popularity. Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
--- 
+select * from payment;
+select * from customer;
+
+Select customer.last_name, sum(payment.amount)
+from payment
+inner join customer on payment.customer_id = customer.customer_id
+group by customer.customer_id
+order by customer.last_name;
+
+
+-- 7a. The music of Queen and Kris Kristofferson have seen an unlikely resurgence. As an unintended consequence, films starting with the 
+-- letters K and Q have also soared in popularity. Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
+select * from film;
+select * from language;
+
+Select language.name, film.title 
+from language
+inner join film on language.language_id = film.language_id
+where film.title in (
+	select title
+	from film
+	where title like 'K%' or title like 'Q%'
+    )
+AND language.name like 'English';
+
+
 -- 7b. Use subqueries to display all actors who appear in the film Alone Trip.
+
+select * from actor;
+select * from film;
+select * from film_actor;
+
+Select actor_name
+from actor
+where actor_id in (
+	select actor_id
+	from film_actor
+	where film_id in (
+		select film_id
+		from film
+		where title like 'Alone Trip'
+		)
+	);
+
+
 -- 
--- 7c. You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
+-- 7c. You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers. 
+-- Use joins to retrieve this information.
 -- 
 -- 7d. Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies categorized as famiy films.
 -- 
