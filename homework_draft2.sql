@@ -186,13 +186,60 @@ where actor_id in (
 -- 
 -- 7c. You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers. 
 -- Use joins to retrieve this information.
+select * from customer;
+select * from address;
+select * from country;
+select * from city;
+
+Select c.first_name, c.last_name, c.email, country.country 
+from customer as c
+inner join address as a on a.address_id = c.address_id
+inner join city on city.city_id = a.city_id
+inner join country on country.country_id = city.country_id
+where country.country like 'Canada';
+
+
 -- 
 -- 7d. Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies categorized as famiy films.
 -- 
+
+select * from film_category;
+select * from category;
+select * from film;
+
+Select category.name, film.title
+from film_category
+inner join film on film.film_id = film_category.film_id
+inner join category on category.category_id = film_category.category_id
+where category.name = 'Family';
+
+
 -- 7e. Display the most frequently rented movies in descending order.
+
+select * from film;
+select * from payment;
+select * from rental;
+select * from inventory;
+
+Select count(f.title), f.title
+from rental as r
+inner join inventory as i on r.inventory_id = i.inventory_id
+inner join film as f on f.film_id = i.film_id
+group by f.title
+order by 1 desc;
+
 -- 
 -- 7f. Write a query to display how much business, in dollars, each store brought in.
 -- 
+
+select * from payment;
+select * from staff;
+
+select sum(p.amount), s.store_id 
+from payment as p
+inner join staff as s on p.staff_id = s.staff_id
+group by s.store_id;
+
 -- 7g. Write a query to display for each store its store ID, city, and country.
 -- 
 -- 7h. List the top five genres in gross revenue in descending order. (Hint: you may need to use the following tables: category, film_category, inventory, payment, and rental.)
