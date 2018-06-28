@@ -241,12 +241,57 @@ inner join staff as s on p.staff_id = s.staff_id
 group by s.store_id;
 
 -- 7g. Write a query to display for each store its store ID, city, and country.
+
+select * from store;
+select * from address;
+select * from city;
+select * from country;
+
+select s.store_id, c.city, y.country
+from store as s
+inner join address as a on s.address_id = a.address_id
+inner join city as c on a.city_id = c.city_id
+inner join country as y on c.country_id = y.country_id;
 -- 
--- 7h. List the top five genres in gross revenue in descending order. (Hint: you may need to use the following tables: category, film_category, inventory, payment, and rental.)
+-- 7h. List the top five genres in gross revenue in descending order. (Hint: you may need to use the following tables: category, film_category, inventory, 
+-- payment, and rental.)
 -- 
--- 8a. In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue. Use the solution from the problem above to create a view. If you haven't solved 7h, you can substitute another query to create a view.
+
+select * from category;
+select * from film_category;
+select * from inventory;
+select * from payment;
+select * from rental;
+
+select count(c.name), c.name, sum(p.amount)
+from payment as p
+inner join rental as r on r.rental_id = p.rental_id
+inner join inventory as i on r.inventory_id = i.inventory_id
+inner join film_category as fc on fc.film_id = i.film_id
+inner join category as c on fc.category_id = c.category_id
+group by c.name
+order by 3 desc
+limit 5;
+
+
+-- 8a. In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue. 
+-- Use the solution from the problem above to create a view. If you haven't solved 7h, you can substitute another query to create a view.
+
+CREATE VIEW Top_five
+as select count(c.name), c.name, sum(p.amount)
+from payment as p
+inner join rental as r on r.rental_id = p.rental_id
+inner join inventory as i on r.inventory_id = i.inventory_id
+inner join film_category as fc on fc.film_id = i.film_id
+inner join category as c on fc.category_id = c.category_id
+group by c.name
+order by 3 desc
+limit 5;
 -- 
 -- 8b. How would you display the view that you created in 8a?
+
+Select * from Top_five;
 -- 
 -- 8c. You find that you no longer need the view top_five_genres. Write a query to delete it.
 -- 
+Drop view Top_five;
