@@ -108,7 +108,13 @@ INNER JOIN address ON staff.address_id=address.address_id;
 
 -- 
 -- 6b. Use JOIN to display the total amount rung up by each staff member in August of 2005. Use tables staff and payment.
--- select * from payment;
+-- select * from payment;  
+
+select staff_id, count(amount)
+from payment
+where payment_date like '2005-08%'
+group by staff_id;
+
 
 select staff_id, count(amount)
 from payment
